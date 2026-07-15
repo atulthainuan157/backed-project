@@ -1,11 +1,18 @@
 {
   "name": "backed-project",
   "version": "1.0.0",
-  "description": "A backend project",
+  "description": "Backend project using mern",
   "keywords": [
-    "javascript",
     "backend"
   ],
+  "homepage": "https://github.com/atulthainuan157/backed-project#readme",
+  "bugs": {
+    "url": "https://github.com/atulthainuan157/backed-project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atulthainuan157/backed-project.git"
+  },
   "license": "ISC",
   "author": "Atul Thainuan",
   "type": "module",
@@ -13,7 +20,11 @@
   "scripts": {
     "dev": "nodemon src/index.js"
   },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.5"
   }
 }
