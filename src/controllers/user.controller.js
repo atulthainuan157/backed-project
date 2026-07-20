@@ -18,15 +18,17 @@ const registerUser = asyncHandler(async (req, res) => {
     // return response
 
     const { fullname, email, username, password } = req.body
-    console.log("email: ", email);
+    // console.log("email: ", email);
+    if(!username || !email || !fullname || !password) {
+        throw new ApiError(400, "All fields are required...");
+    }
 
-
-    if (fullname.trim() === "" && email.trim() === "" && username.trim() === "" && password.trim() === "") {
+    if (fullname.trim() === "" || email.trim() === "" || username.trim() === "" || password.trim() === "") {
         throw new ApiError(400, "All fields are required...");
     }
 
 
-    const existingUser = User.findOne({
+    const existingUser = await User.findOne({
         $or: [{ username }, { email }]
     });
 
@@ -50,7 +52,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
 
-    const user = User.create({
+    const user = await User.create({
         fullname,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
@@ -59,7 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username.toLowerCase(),
     });
 
-    const createdUser = await User.findBtId(user._id).select(
+    const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
     );
 

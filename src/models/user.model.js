@@ -52,25 +52,26 @@ const userSchema = new Schema(
     }
 );
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        return next();
+        // return next();
+        return;
     }
     this.password = await bcrypt.hash(this.password, 10)
-    next();
+    // next();
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessTokens = async function () {
+userSchema.methods.generateAccessToken = async function () {
     return await jwt.sign(
         {
-            _id = this._id,
-            email = this.email,
-            username = this.username,
-            fullname = this.fullname,
+            _id: this._id,
+            email: this.email,
+            username: this.username,
+            fullname: this.fullname,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -79,14 +80,14 @@ userSchema.methods.generateAccessTokens = async function () {
     )
 };
 
-userSchema.methods.generateRefreshTokens = async function () {
+userSchema.methods.generateRefreshToken = async function () {
     return await jwt.sign(
         {
-            _id = this._id,
+            _id: this._id,
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: REFRESH_TOKEN_EXPIRY
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 };
